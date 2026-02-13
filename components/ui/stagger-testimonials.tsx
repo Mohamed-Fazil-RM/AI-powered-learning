@@ -61,14 +61,16 @@ interface TestimonialCardProps {
   position: number;
   testimonial: typeof testimonials[0];
   handleMove: (steps: number) => void;
-  cardSize: number;
+  width: number;
+  height: number;
 }
 
 const TestimonialCard: React.FC<TestimonialCardProps> = ({ 
   position, 
   testimonial, 
   handleMove, 
-  cardSize 
+  width,
+  height
 }) => {
   const isCenter = position === 0;
   const zIndex = 20 - Math.abs(position);
@@ -79,19 +81,18 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
       onClick={() => handleMove(position)}
       className={cn(
         "absolute left-1/2 top-1/2 cursor-pointer border-2 p-8 transition-all duration-500 ease-in-out select-none",
-        // Center card is bright/light, background cards are dark to contrast with the dark section
         isCenter 
           ? "bg-[#EBEBEB] text-gray-900 border-white shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)]" 
           : "bg-[#1A1A1C] text-gray-400 border-white/5 hover:border-white/10 opacity-100 grayscale-[0.2] hover:grayscale-0 shadow-xl"
       )}
       style={{
-        width: cardSize,
-        height: cardSize,
+        width: width,
+        height: height,
         zIndex: zIndex,
-        clipPath: `polygon(50px 0%, calc(100% - 50px) 0%, 100% 50px, 100% 100%, calc(100% - 50px) 100%, 50px 100%, 0 100%, 0 0)`,
+        clipPath: `polygon(40px 0%, calc(100% - 40px) 0%, 100% 40px, 100% 100%, calc(100% - 40px) 100%, 40px 100%, 0 100%, 0 0)`,
         transform: `
           translate(-50%, -50%) 
-          translateX(${(cardSize / 1.3) * position}px)
+          translateX(${(width / 1.15) * position}px)
           translateY(${isCenter ? -65 : position % 2 ? 15 : -15}px)
           rotate(${isCenter ? 0 : position % 2 ? 3 : -3}deg)
           scale(${scale})
@@ -102,7 +103,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
         className="absolute block origin-top-right rotate-45 bg-gray-500/20"
         style={{
           right: -2,
-          top: 48,
+          top: 38,
           width: SQRT_5000,
           height: 2
         }}
@@ -110,7 +111,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
       <img
         src={testimonial.imgSrc}
         alt={`${testimonial.by.split(',')[0]}`}
-        className="mb-6 h-16 w-14 bg-gray-100 object-cover object-center rounded-sm pointer-events-none"
+        className="mb-5 h-14 w-12 bg-gray-100 object-cover object-center rounded-sm pointer-events-none"
         style={{
           boxShadow: isCenter ? "3px 3px 0px #3b82f6" : "3px 3px 0px #333"
         }}
@@ -122,7 +123,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
         "{testimonial.testimonial}"
       </h3>
       <p className={cn(
-        "absolute bottom-8 left-8 right-8 mt-2 text-sm font-semibold italic",
+        "absolute bottom-6 left-8 right-8 mt-2 text-xs font-semibold italic",
         isCenter ? "text-blue-600" : "text-gray-500"
       )}>
         — {testimonial.by}
@@ -132,7 +133,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
 };
 
 export const StaggerTestimonials: React.FC = () => {
-  const [cardSize, setCardSize] = useState(365);
+  const [dims, setDims] = useState({ w: 420, h: 300 });
   const [testimonialsList, setTestimonialsList] = useState(testimonials);
 
   const handleMove = (steps: number) => {
@@ -156,7 +157,7 @@ export const StaggerTestimonials: React.FC = () => {
   useEffect(() => {
     const updateSize = () => {
       const { matches } = window.matchMedia("(min-width: 640px)");
-      setCardSize(matches ? 365 : 290);
+      setDims(matches ? { w: 420, h: 300 } : { w: 320, h: 260 });
     };
 
     updateSize();
@@ -167,7 +168,7 @@ export const StaggerTestimonials: React.FC = () => {
   return (
     <div
       className="relative w-full overflow-hidden bg-transparent"
-      style={{ height: 650 }}
+      style={{ height: 600 }}
     >
       {testimonialsList.map((testimonial, index) => {
         const position = testimonialsList.length % 2
@@ -182,16 +183,17 @@ export const StaggerTestimonials: React.FC = () => {
             testimonial={testimonial}
             handleMove={handleMove}
             position={position}
-            cardSize={cardSize}
+            width={dims.w}
+            height={dims.h}
           />
         );
       })}
       
-      <div className="absolute bottom-12 left-1/2 flex -translate-x-1/2 gap-4 z-50">
+      <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 gap-4 z-50">
         <button
           onClick={() => handleMove(-1)}
           className={cn(
-            "flex h-14 w-14 items-center justify-center text-2xl transition-all rounded-full border-2",
+            "flex h-12 w-12 items-center justify-center text-xl transition-all rounded-full border-2",
             "bg-[#1A1A1C] border-white/10 text-white hover:bg-white hover:text-black hover:border-white",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 shadow-lg"
           )}
@@ -202,7 +204,7 @@ export const StaggerTestimonials: React.FC = () => {
         <button
           onClick={() => handleMove(1)}
           className={cn(
-            "flex h-14 w-14 items-center justify-center text-2xl transition-all rounded-full border-2",
+            "flex h-12 w-12 items-center justify-center text-xl transition-all rounded-full border-2",
             "bg-[#1A1A1C] border-white/10 text-white hover:bg-white hover:text-black hover:border-white",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 shadow-lg"
           )}
