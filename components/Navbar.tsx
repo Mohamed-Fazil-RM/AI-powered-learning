@@ -4,9 +4,11 @@ import Logo from './Logo';
 
 interface NavbarProps {
   scrolled: boolean;
+  onNavigateLogin?: () => void;
+  onNavigateSignup?: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
+const Navbar: React.FC<NavbarProps> = ({ scrolled, onNavigateLogin, onNavigateSignup }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -29,6 +31,14 @@ const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
     return () => window.removeEventListener('scroll', handleScrollVisibility);
   }, [lastScrollY]);
 
+  const scrollToFeatures = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const featuresSection = document.getElementById('edge');
+    if (featuresSection) {
+      featuresSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <nav 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 transform ${
@@ -46,7 +56,22 @@ const Navbar: React.FC<NavbarProps> = ({ scrolled }) => {
           </span>
         </div>
 
-        {/* Removed Get Started CTA */}
+        {/* Navigation CTAs */}
+        <div className="flex items-center gap-3">
+          <a 
+            href="#about" 
+            onClick={scrollToFeatures}
+            className="px-6 py-2.5 bg-white text-gray-900 border border-gray-200 rounded-full font-bold text-sm hover:bg-gray-50 hover:shadow-md transition-all active:scale-95 shadow-sm"
+          >
+            About
+          </a>
+          <button 
+            onClick={onNavigateLogin}
+            className="px-6 py-2.5 bg-white text-gray-900 border border-gray-200 rounded-full font-bold text-sm hover:bg-gray-50 hover:shadow-md transition-all active:scale-95 shadow-sm"
+          >
+            Login
+          </button>
+        </div>
       </div>
     </nav>
   );

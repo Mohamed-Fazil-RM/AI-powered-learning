@@ -1,10 +1,10 @@
 import React from "react";
 import { cn } from "../../lib/utils";
 
-export interface RainbowButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+// Fix: Use type alias instead of interface to correctly merge library types and fix "property does not exist" errors
+export type RainbowButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: "dark" | "light";
-}
+};
 
 export function RainbowButton({
   children,

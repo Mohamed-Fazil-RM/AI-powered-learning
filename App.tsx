@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -6,9 +7,12 @@ import { FeaturesSectionWithHoverEffects } from './components/ui/feature-section
 import { StaggerTestimonials } from './components/ui/stagger-testimonials';
 import { StickyFooter } from './components/ui/sticky-footer';
 import { RainbowButton } from './components/ui/rainbow-button';
+import LoginPage from './components/auth/LoginPage';
+import SignupPage from './components/auth/SignupPage';
 
 const App: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [view, setView] = useState<'landing' | 'login' | 'signup'>('landing');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,6 +22,19 @@ const App: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Scroll to top when view changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [view]);
+
+  if (view === 'login') {
+    return <LoginPage onNavigateLanding={() => setView('landing')} onNavigateSignup={() => setView('signup')} />;
+  }
+
+  if (view === 'signup') {
+    return <SignupPage onNavigateLanding={() => setView('landing')} onNavigateLogin={() => setView('login')} />;
+  }
+
   return (
     <div className="min-h-screen relative selection:bg-blue-100 selection:text-blue-900 bg-[#F5F5F0]">
       {/* Dynamic Background Accents */}
@@ -26,18 +43,19 @@ const App: React.FC = () => {
         <div className="absolute bottom-[-10%] right-[-10%] w-[55%] h-[55%] bg-purple-400/5 blur-[120px] rounded-full"></div>
       </div>
 
-      <Navbar scrolled={scrolled} />
+      <Navbar 
+        scrolled={scrolled} 
+        onNavigateLogin={() => setView('login')} 
+        onNavigateSignup={() => setView('signup')} 
+      />
       
       <main className="relative z-10">
         {/* Section 1: Hero */}
-        <Hero />
+        <Hero onNavigateSignup={() => setView('signup')} />
         
         {/* Section 2: The LearnEzily Edge */}
         <section id="edge" className="py-32 md:py-48 bg-transparent border-t border-gray-100/50">
           <div className="max-w-7xl mx-auto px-6 text-center mb-24">
-             <div className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 font-bold text-xs tracking-widest uppercase mb-6">
-               Core Principles
-             </div>
              <h3 className="text-4xl md:text-6xl font-extrabold font-display text-gray-900 tracking-tight leading-none mb-6">
                The LearnEzily Edge
              </h3>
@@ -58,9 +76,6 @@ const App: React.FC = () => {
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none brightness-50"></div>
           
           <div className="max-w-7xl mx-auto px-6 mb-24 text-center relative z-20">
-            <div className="inline-block px-4 py-1.5 rounded-full bg-white/5 text-blue-400 font-bold text-xs tracking-widest uppercase mb-6 border border-white/10 backdrop-blur-md">
-              Success Stories
-            </div>
             <h2 className="text-5xl md:text-7xl font-extrabold font-display text-white tracking-tight leading-none">
               What Our Students say
             </h2>
@@ -89,7 +104,7 @@ const App: React.FC = () => {
                 Start learning smarter, not harder with our adaptive AI engine. Curated paths for the careers of tomorrow.
               </p>
               <div className="flex justify-center">
-                <RainbowButton className="h-20 px-16 text-xl shadow-xl">Try Now For Free</RainbowButton>
+                <RainbowButton onClick={() => setView('signup')} className="h-20 px-16 text-xl shadow-xl">Try Now For Free</RainbowButton>
               </div>
             </div>
           </div>

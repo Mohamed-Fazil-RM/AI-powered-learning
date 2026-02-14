@@ -1,9 +1,14 @@
+
 import React from 'react';
 import { RainbowButton } from './ui/rainbow-button';
 import { ChevronRight, Play } from 'lucide-react';
 import { GooeyText } from './ui/gooey-text-morphing';
 
-const Hero: React.FC = () => {
+interface HeroProps {
+  onNavigateSignup?: () => void;
+}
+
+const Hero: React.FC<HeroProps> = ({ onNavigateSignup }) => {
   const handleWatchDemo = () => {
     // Placeholder for demo functionality
     console.log("Watch demo triggered");
@@ -39,7 +44,7 @@ const Hero: React.FC = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 animate-in fade-in slide-in-from-bottom-10 duration-700 delay-400">
-            <RainbowButton variant="dark" className="h-20 px-14 text-xl shadow-2xl">
+            <RainbowButton onClick={onNavigateSignup} variant="dark" className="h-20 px-14 text-xl shadow-2xl">
               Get Started Free
               <ChevronRight className="w-6 h-6 ml-2" />
             </RainbowButton>

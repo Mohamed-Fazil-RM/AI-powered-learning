@@ -69,16 +69,19 @@ export function FeaturesSectionWithHoverEffects() {
   );
 }
 
-const Feature = ({
-  title,
-  description,
-  icon,
-  index,
-}: {
+// Fix: Explicitly define props to avoid "key" property errors when spreading
+interface FeatureProps {
   title: string;
   description: string;
   icon: React.ReactNode;
   index: number;
+}
+
+const Feature: React.FC<FeatureProps> = ({
+  title,
+  description,
+  icon,
+  index,
 }) => {
   return (
     <div
