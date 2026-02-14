@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -9,10 +8,16 @@ import { StickyFooter } from './components/ui/sticky-footer';
 import { RainbowButton } from './components/ui/rainbow-button';
 import LoginPage from './components/auth/LoginPage';
 import SignupPage from './components/auth/SignupPage';
+import Dashboard from './components/Dashboard';
+import AIPage from './components/AIPage';
+import SettingsPage from './components/SettingsPage';
+import CourseMaterialsPage from './components/CourseMaterialsPage';
+import { AppleStyleDock } from './components/AppleStyleDock';
 
 const App: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
-  const [view, setView] = useState<'landing' | 'login' | 'signup'>('landing');
+  const [view, setView] = useState<'landing' | 'login' | 'signup' | 'dashboard' | 'ai' | 'settings' | 'courses'>('landing');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,22 +27,66 @@ const App: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Scroll to top when view changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [view]);
 
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true);
+    setView('dashboard');
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setView('landing');
+  };
+
   if (view === 'login') {
-    return <LoginPage onNavigateLanding={() => setView('landing')} onNavigateSignup={() => setView('signup')} />;
+    return <LoginPage onNavigateLanding={() => setView('landing')} onNavigateSignup={() => setView('signup')} onLoginSuccess={handleLoginSuccess} />;
   }
 
   if (view === 'signup') {
-    return <SignupPage onNavigateLanding={() => setView('landing')} onNavigateLogin={() => setView('login')} />;
+    return <SignupPage onNavigateLanding={() => setView('landing')} onNavigateLogin={() => setView('login')} onSignupSuccess={handleLoginSuccess} />;
+  }
+
+  if (view === 'dashboard') {
+    return (
+      <div className="min-h-screen bg-[#F5F5F0]">
+        <Dashboard />
+        <AppleStyleDock currentView="dashboard" onNavigate={(v) => setView(v as any)} onLogout={handleLogout} />
+      </div>
+    );
+  }
+
+  if (view === 'ai') {
+    return (
+      <div className="min-h-screen bg-[#0D0D0E]">
+        <AIPage />
+        <AppleStyleDock currentView="ai" onNavigate={(v) => setView(v as any)} onLogout={handleLogout} />
+      </div>
+    );
+  }
+
+  if (view === 'settings') {
+    return (
+      <div className="min-h-screen bg-[#F5F5F0]">
+        <SettingsPage />
+        <AppleStyleDock currentView="settings" onNavigate={(v) => setView(v as any)} onLogout={handleLogout} />
+      </div>
+    );
+  }
+
+  if (view === 'courses') {
+    return (
+      <div className="min-h-screen bg-[#F5F5F0]">
+        <CourseMaterialsPage />
+        <AppleStyleDock currentView="courses" onNavigate={(v) => setView(v as any)} onLogout={handleLogout} />
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen relative selection:bg-blue-100 selection:text-blue-900 bg-[#F5F5F0]">
-      {/* Dynamic Background Accents */}
       <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
         <div className="absolute top-[-5%] left-[-5%] w-[45%] h-[45%] bg-blue-400/5 blur-[100px] rounded-full"></div>
         <div className="absolute bottom-[-10%] right-[-10%] w-[55%] h-[55%] bg-purple-400/5 blur-[120px] rounded-full"></div>
@@ -50,10 +99,8 @@ const App: React.FC = () => {
       />
       
       <main className="relative z-10">
-        {/* Section 1: Hero */}
         <Hero onNavigateSignup={() => setView('signup')} />
         
-        {/* Section 2: The LearnEzily Edge */}
         <section id="edge" className="py-32 md:py-48 bg-transparent border-t border-gray-100/50">
           <div className="max-w-7xl mx-auto px-6 text-center mb-24">
              <h3 className="text-4xl md:text-6xl font-extrabold font-display text-gray-900 tracking-tight leading-none mb-6">
@@ -66,12 +113,9 @@ const App: React.FC = () => {
           <FeaturesSectionWithHoverEffects />
         </section>
 
-        {/* Section 3: Bento Features */}
         <BentoFeatures />
         
-        {/* Section 4: What Our Students say */}
         <section id="success-stories" className="py-32 md:py-48 bg-[#0A0A0B] relative overflow-hidden">
-          {/* Subtle grid or glow for the dark section */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent_70%)] pointer-events-none"></div>
           <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none brightness-50"></div>
           
@@ -88,10 +132,8 @@ const App: React.FC = () => {
             <StaggerTestimonials />
           </div>
 
-          {/* Section 5: Final CTA */}
           <div className="mt-32 px-6 max-w-7xl mx-auto relative z-20 mb-12">
             <div className="py-24 px-8 md:px-16 rounded-[4rem] bg-white text-gray-900 text-center relative overflow-hidden group shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] border border-gray-100">
-              {/* Animated accent */}
               <div className="absolute top-0 right-0 w-full h-1 bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 animate-rainbow bg-[length:200%]"></div>
               
               <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-blue-500/5 blur-[120px] -translate-y-1/2 -mr-64 rounded-full"></div>

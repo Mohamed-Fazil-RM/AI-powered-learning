@@ -1,10 +1,11 @@
 "use client";
 
 import * as React from "react";
-import { motion } from "motion/react";
+import { motion, Variants } from "framer-motion";
 import { cn } from "../../lib/utils";
 
-const containerVariants = {
+// Fix: Added explicit Variants type to avoid inference issues with nested transition properties
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -15,7 +16,8 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+// Fix: Added explicit Variants type to satisfy the motion.div variants prop and correctly type 'spring'
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,

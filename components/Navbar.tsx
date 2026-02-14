@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Logo from './Logo';
 
@@ -8,14 +7,16 @@ interface NavbarProps {
   onNavigateSignup?: () => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ scrolled, onNavigateLogin, onNavigateSignup }) => {
+const Navbar: React.FC<NavbarProps> = ({ 
+  scrolled, 
+  onNavigateLogin, 
+}) => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
   useEffect(() => {
     const handleScrollVisibility = () => {
       const currentScrollY = window.scrollY;
-
       if (currentScrollY < 50) {
         setIsVisible(true);
       } else if (currentScrollY > lastScrollY) {
@@ -23,10 +24,8 @@ const Navbar: React.FC<NavbarProps> = ({ scrolled, onNavigateLogin, onNavigateSi
       } else {
         setIsVisible(true);
       }
-      
       setLastScrollY(currentScrollY);
     };
-
     window.addEventListener('scroll', handleScrollVisibility, { passive: true });
     return () => window.removeEventListener('scroll', handleScrollVisibility);
   }, [lastScrollY]);
@@ -34,9 +33,7 @@ const Navbar: React.FC<NavbarProps> = ({ scrolled, onNavigateLogin, onNavigateSi
   const scrollToFeatures = (e: React.MouseEvent) => {
     e.preventDefault();
     const featuresSection = document.getElementById('edge');
-    if (featuresSection) {
-      featuresSection.scrollIntoView({ behavior: 'smooth' });
-    }
+    if (featuresSection) featuresSection.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -48,15 +45,13 @@ const Navbar: React.FC<NavbarProps> = ({ scrolled, onNavigateLogin, onNavigateSi
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-        {/* Logo */}
         <div className="flex items-center gap-3 group cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
           <Logo className="group-hover:scale-110" size={44} />
-          <span className="text-2xl font-black tracking-tight font-display text-gray-900">
+          <span className="text-2xl font-black tracking-tight font-display transition-colors text-gray-900">
             LearnEzily
           </span>
         </div>
 
-        {/* Navigation CTAs */}
         <div className="flex items-center gap-3">
           <a 
             href="#about" 
